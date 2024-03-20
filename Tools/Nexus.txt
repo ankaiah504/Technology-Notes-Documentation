@@ -1,0 +1,125 @@
+
+=================
+Nexus Repository
+=================
+
+=> Artifactory server
+
+=> It is used to store project artifacts jar / war
+
+=> Using Nexus we can maintain Maven Remote repositories
+
+=> Remote repositories are used for shared libraries
+
+=> Shared Libraries means the jars which are required for multiple projects
+
+
+Note: In realtime we will use remote repositories for libraries
+
+==========================
+Nexus Setup using Docker
+=========================
+
+https://github.com/ashokitschool/DevOps-Documents/blob/main/06-Nexus-Setup-Docker.md
+
+##################
+Remote Repository 
+##################
+
+-> Remote repository used for shared libraries (common jars required for multiple projects)
+
+-> If we want to use few jar files in multiple projects in the company then we will use Remote Repository to store those jars (libraries).
+
+-> Remote repository is specific to our company projects
+
+-> Create remote repo in nexus and upload a jar file 
+
+	-> Go to Repositories
+	-> Create New Repository
+	-> Choose Maven (Hosted) Repository
+	-> Give a name for Repository (Ex: ashokit-remote-repository) & Complete the process
+			
+Note: With above steps Remote Repository got created.
+
+
+Remote Repo URL : http://13.126.20.221:8081/repository/ashokit-remote-repository/
+
+	-> Go to BrowseSection
+	-> Select Remote Repository (By default it is empty)
+	-> Click on Upload Component
+	-> Upload Jar file and give groupId, artifactId and Version		
+
+			groupId : in.ashokit
+			artifactId : pwd-utils
+			version : 1.0		
+
+-> Take dependency details of uploaded jar file and add in project pom.xml as a dependency like below
+
+<dependency>
+  <groupId>in.ashokit</groupId>
+  <artifactId>pwd-utils</artifactId>
+  <version>1.0</version>
+</dependency>
+
+-> We need to add Remote Repository Details in pom.xml above <dependencies/> tag
+
+		<repositories>
+			<repository>
+				<id>nexus</id>
+				<url>http://15.206.128.43:8081/repository/ashokit-remote-repo/</url>
+			</repository>
+		</repositories>
+
+-> Add nexus server details in maven settings.xml file
+
+		<server>
+			<id>nexus</id>
+			<username>admin</username>
+			<password>admin</password>
+		</server>
+
+-> After adding the remote repository details in pom.xml then execute maven package goal and see dependency is downloading from nexus repo or not.
+
+		$ mvn clean package
+
+
+=========================================
+How to resolve HTTP Mirror Block Issue ?
+=========================================
+
+=> Make below change in Maven/conf/settings.xml
+
+<mirror>
+      <id>maven-default-http-blocker</id>
+      <mirrorOf>dummy</mirrorOf>
+      <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+      <url>http://0.0.0.0/</url>
+      <blocked>false</blocked>
+</mirror>
+
+===================
+Realtime work flow
+===================
+
+=> DevOps team will setup nexus repository
+
+=> As a developer, we need to take settings.xml file from any existing team member
+
+=> Keep settings.xml file in Maven Conf folder and configure our credentials
+
+Note: With this configuration our maven projects will connect with remote repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
