@@ -1,0 +1,71 @@
+Ubuntu: Docker Configuration
+
+sudo apt install git
+
+git clone url
+username:
+password : personal access token---------------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
+
+sudo apt install maven
+
+sudo apt-get install software-properties-common
+sudo apt-add-repository universe
+sudo apt-get update
+sudo apt-get install maven
+
+mvn -version
+mvn clean
+
+sudo apt install openjdk-17-jdk
+
+build using :
+
+mvn package
+
+save file:  :wq
+
+Installing docker :
+
+sudo apt update
+curl -fsSL get.docker.com | /bin/bash
+sudo usermod -aG docker ubuntu 
+exit
+
+
+To check docker images:
+
+docker images 
+
+
+docker build . -f Dockerfile.txt
+
+
+while creating docker file Name Should be "Dockerfile"
+
+docker run -d -p 8080:8080 subscriberservice
+
+Note: If you’ve created a Docker container, but it’s not showing up when you run docker ps, there could be a few reasons for this behavior.
+
+Check Container Status: First, ensure that the container is actually running. You mentioned that the container is created, but it might not be in a running state. Use the following command to see all containers (including stopped ones):
+docker ps -a
+If your container is listed here, it means it was created but is not currently running. To start it, use:
+docker start CONTAINER_ID
+
+
+Restart Docker Service: Sometimes, Docker’s internal state can get out of sync. Restarting the Docker service can help. Run the following command:
+sudo systemctl restart docker
+This will restart Docker, and any containers set to auto-start will come back online. Note that this will kill all running containers, but they’ll be automatically restarted.
+Check Docker Version and Images: Verify that you’re using the correct Docker version. Run:
+docker -v
+Ensure that the version matches what you expect. Also, check if you have any Docker images:
+docker images
+If you don’t see any images, it might indicate an issue with Docker itself.
+Check Listening Ports: You mentioned that the listening ports are blocked by “docker-pr.” Make sure there are no firewall rules or other network-related issues preventing Docker from functioning properly.
+Permissions and User Context: Ensure that you’re running Docker commands with appropriate permissions. You might need to use sudo or add your user to the docker group (if not already done).
+Inspect Container Logs: If the container is running but not showing up, inspect its logs for any errors:
+docker logs CONTAINER_ID
+This might provide clues about why the container isn’t visible.
+
+
+
+
