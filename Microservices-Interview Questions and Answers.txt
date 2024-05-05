@@ -1,0 +1,151 @@
+                                     Microservices
+==================================================================================================
+
+1)What is Monolith Architecture?
+=========================================================================================================
+
+-> If we develop all the functionalities in single project then it is called as Monolith architecture based application
+
+-> We will package our application as a jar/war to deploy into server
+
+-> As monolith application contains all functionalities, it will become fat jar/war
+
+Advantages:
+1) Simple to develop
+
+2) Everything is available at once place
+
+3) Configuration required only once
+
+DisAdvantages:
+
+1) Difficult to maintain
+
+2) Dependencies among the functionalites
+
+3) Single Point Of Failure
+
+4) Entire Project Deployment
+
+2 What is Microservices Microservices architecture?
+==================================================================================
+-> Microservices is not a programming language
+
+-> Microservices is not a framework
+
+-> Microservices is not an Specification API
+
+-> Microservices is an architectural design pattern
+
+-> Microservices suggesting to develop application functionalities with loosely coupling
+
+-> In Microservices architecture we don't develop all the functionalities in single project. We will divide project functionalities into several REST APIs
+-> Note: One REST API is called as one Microservice
+-> Microservices architecture based project means collection of REST APIs.
+
+-> Microservices is not related to only java. Any programming language specific project can use Microservices Architecture.
+
+Advantages:
+
+1) Loosely Coupling
+
+2) Easy To maintain
+
+3) Faster Development
+
+4) Quick Deployment
+
+5) Faster Releases
+
+6) Less Downtime
+
+7) Technology Independence
+
+Dis-Advantages:
+
+1) Bounded Context
+
+2) Lot of configurations
+
+3) Visibility
+
+4) Pack of cards
+
+Microservices Architecture:
+
+-> We don't have any fixed architecture for Microservices
+
+-> People are customizing microservices architecture according to their requirement
+
+-> Most of the projects will use below components in Microservices Architecture
+
+
+1) Service Registry (Eureka Server)
+
+2) Services (REST APIs)
+
+3) Interservice Communication (FeginClient)
+
+4) API Gateway (Zuul Proxy)
+
+5) Admin Server
+
+6) Sleuth & Zipkin Server
+
+3.what is Service Registry?
+==================================
+-> Service Registry acts as DB of services available in the project
+-> It provides the details of all the services which are registered with Service Registry
+-> We can identify how many services available in the project
+-> We can identify how many instances available for each service
+-> We can use "Eureka Server" as service registry
+-> Eureka Server provided by "Spring Cloud Netflix" library
+
+Steps to develop Service Registry Application (Eureka Server):
+
+1) Create Service Registry application with below dependency
+
+	 a) EurekaServer (spring-cloud-starter-netflix-eureka-server)
+	 b) web-starter
+	 c) devtools	
+
+2) Configure @EnableEurekaServer annotation in boot start class
+
+3) Configure below properties in application.yml file
+
+server:
+  port: 8761
+  
+eureka:
+  client:
+    register-with-eureka: false
+
+Note: If Service-Registry project port is 8761 then clients can discover service-registry and will register automatically with service-registry. If service-registry project running on any other port number then we have to register clients with service-registry manually.
+
+4) Once application started we can access Eureka Dashboard using below URL
+
+		URL : http://localhost:8761/
+
+
+4.what is service?
+===============================================
+-> Services means REST APIs / Microservices
+-> Services contains backend business logic
+-> In the project, some services will interact with DB
+-> In the project, some services will interact with third party REST API ( external communication )
+-> In the project, some services will interact with another services with in the project
+   ( inter-service communication )
+-> For inter-service communication we will use feign-client
+-> To distribute the load, we can run one service with Multiple Instances (Load Balancing)
+
+Note: We will register every service with Service Registry
+
+5.what is APY Getway?
+==================================================
+-> API Gateway is used to manage our backend apis of the project
+-> API Gateway acts as mediator between end users and backend apis
+-> API Gateway can filter logic to decide request processing
+-> API Gateway will contain Routing logic (which request should go to which REST API)
+-> API Gateway also will be registered with Service Registry
+
+

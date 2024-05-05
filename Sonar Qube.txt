@@ -1,0 +1,167 @@
+=============
+Sonar Qube
+=============
+
+=> It is used for code quality checking
+
+-> It is used for project source code review
+
+-> It will perform static code analysis
+
+-> To Identify developer mistakes in coding
+
+-> SonarQube software developed using Java language		
+
+-> SonarQube supports 30+ programming languages
+
+-> Sonar Qube is available in 2 flavours
+
+			1) Enterprise Edition
+
+			2) Community Edition
+
+
+==============
+Sonar Issues
+==============
+
+1) Bugs
+
+2) Vulnerabilities (security issues)
+
+3) Code smells (repeated string literals, unsed imports, method params....)
+
+4) Duplicate code blocks
+
+5) Code Coverage (no.of lines tested using junit)
+
+
+====================
+Sonar Server Setup 
+====================
+
+https://github.com/ashokitschool/DevOps-Documents/blob/main/05-Sonar-Setup-Docker.md
+
+
+================================================
+Integrate Sonar server with Java Maven App
+=================================================
+
+-> Configure Sonar Properties under <properties/> tag in "pom.xml"
+
+  <properties>
+		<sonar.host.url>http://13.235.69.171:9000/</sonar.host.url>
+		<sonar.login>admin</sonar.login>
+		<sonar.password>admin</sonar.password>
+  </properties>
+	
+-> Go to project pom.xml file location and execute below goal
+
+			$ mvn sonar:sonar
+
+-> After build success, goto sonar dashboard and verify the results
+
+Note: Instead of username and pwd we can configure sonar token in pom.xml
+
+
+=======================
+Working with Sonar Token
+=======================
+-> Goto Sonar Server Dashboard -> Login -> Click on profile -> My Account -> Security -> Generate Token 
+
+-> Copy the token and configure that token in pom.xml file like below
+	
+	<sonar.host.url>http://13.233.106.91:9000/</sonar.host.url>
+	<sonar.login>10f56df67747b0b12246e3d1160fcba718b85118</sonar.login>
+
+-> Then build the project using "mvn sonar:sonar" goal
+
+==================
+Quality Profile
+==================
+
+=> Every language having its own quality profile in SonarQube
+
+=> Quality Profile means set of rules to perform code review
+
+=> We can create our own Quality Profile also
+
+=============
+Quality Gate
+=============
+
+=> It will decide overall rating for our project
+
+=> We will have 2 states here
+
+			1) Passed
+
+			2) Failed
+
+=> Quality Gate will decide GO / No-Go for our application
+
+=> Go means code is eligible for deployment
+
+=> No Go means code is not eligible for deployment.
+
+============================================
+How code review will happen in realtime ?
+=============================================
+
+=> SonarQube server will be configured with Jenkins Pipeline to perform code review.
+
+
+Note : SonarQube server setup and jenkins pipeline will be taken care by DevOps team in project.
+
+
+=> As a developer we will run jenkins pipeline and we will check sonar dashboard for code review report.
+
+=> Based on sonar report, we have to fix sonar issues in code.
+
+================
+Lessons learnt
+================
+
+1) Use StringBuilder instead of StringBuffer
+
+2) Reuse Random class (dont create object inside method)
+
+3) Declare private constructor for Constants class
+
+4) Remove unwanted curley braces in lambda expression
+
+5) Remove commented code
+
+6) Remove unused imports and unused method parameters
+
+7) Decare constants for repeated String literals
+
+8) Remove Duplicate code
+
+9) Handle NullPointerExceptions properly
+
+
+
+For new joinees below tasks will be assigned in first 3 months..
+
+1) sonar fixes
+
+2) Implement Unit test cases
+
+3) Improve Code coverage for the project (80 %)
+
+4) Bug fixing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
