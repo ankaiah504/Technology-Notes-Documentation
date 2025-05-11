@@ -1,0 +1,105 @@
+Stream<String> stream = Stream.of("a", "b", "c");
+Stream<String> emptyStream = Stream.empty();
+Filtering and Collecting Data:
+
+You have a list of employees and want to find all employees who are older than 30 and collect their names.
+
+list.stream().filter(e->e.age>30).map(Employee::getName).collect(Collectors.toList());
+
+Max number: You want to group a list of employees by their age.
+
+Integer int=list.stream().max(Integer::compareTo);
+Map<Integer, List<Employee>> groupedByAge = employees.stream()
+            .collect(Collectors.groupingBy(Employee::getAge));
+You want to sum all elements in a list.:
+
+ int sum = numbers.stream().reduce(0, Integer::sum);
+ 
+ You need to check if all elements in a list are positive numbers
+ boolean allPositive = numbers.stream()
+            .allMatch(n -> n > 0);
+			
+Reverse an array:
+
+public void reverseArray(int[] array) {
+    int start = 0;
+    int end = array.length - 1;
+    while (start < end) {
+        int temp = array[start];
+        array[start] = array[end];
+        array[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+Write a program to filter a list of integers to retain only even numbers and then collect them into a new list.
+
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        List<Integer> evenNumbers = numbers.stream()
+                                           .filter(n -> n % 2 == 0)
+                                           .collect(Collectors.toList());
+
+Given a list of strings, convert them to uppercase and concatenate them into a single string separated by commas.
+
+
+        String result = words.stream()
+                             .map(String::toUpperCase)
+                             .collect(Collectors.joining(", "));
+3. Find First:
+
+Write a program to find the first element in a list of integers that is greater than 5.
+
+ Optional<Integer> firstGreaterThanFive = numbers.stream()
+                                                        .filter(n -> n > 5)
+                                                        .findFirst();
+
+        firstGreaterThanFive.ifPresent(n -> System.out.println("First number greater than 5: " + n));
+		Count:
+Count the number of elements in a list of strings that start with the letter 'a'.
+List<Integer> evenNumbers = numbers.stream()
+                                           .filter(n -> n % 2 == 0)
+                                           .collect(Collectors.toList());
+Map and Reduce:
+
+ String result = words.stream()
+                             .map(String::toUpperCase)
+                             .collect(Collectors.joining(", "));
+ Flatten a list of lists into a single list of integers.:
+ 
+ List<List<Integer>> listOfLists = Arrays.asList(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(4, 5, 6),
+                Arrays.asList(7, 8, 9)
+        );
+
+        List<Integer> flattenedList = listOfLists.stream()
+                                                 .flatMap(List::stream)
+                                                 .collect(Collectors.toList());
+ Distinct Elements:
+ List<Integer> distinctNumbers = numbers.stream()
+                                               .distinct()
+                                               .collect(Collectors.toList());
+
+        System.out.println("Distinct numbers: " + distinctNumbers);
+ Reduce Operation:
+ 
+Calculate the sum of a list of integers using the reduce operation.
+
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        Optional<Integer> sum = numbers.stream()
+                                        .reduce((a, b) -> a + b);
+
+        sum.ifPresent(s -> System.out.println("Sum: " + s));
+
+Custom Collectors:
+		
+ Create a custom collector that concatenates strings with a hyphen.
+ List<String> words = Arrays.asList("apple", "banana", "cherry");
+
+        String result = words.stream()
+                             .collect(Collectors.joining(" - "));
+
+        System.out.println("Concatenated string: " + result);

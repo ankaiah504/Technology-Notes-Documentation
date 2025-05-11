@@ -67,5 +67,11 @@ docker logs CONTAINER_ID
 This might provide clues about why the container isn’t visible.
 
 
+Aws S3:
+============================
+
+S3------Create Bucket
+ACLs enabled
+
 
 

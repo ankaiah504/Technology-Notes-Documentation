@@ -552,3 +552,6 @@ Note: With in 24 hours domain gets activated.
 Step-4 : Map application URL to domain name.
 
 Step-5 : Access our application using domain name.
+
+
+

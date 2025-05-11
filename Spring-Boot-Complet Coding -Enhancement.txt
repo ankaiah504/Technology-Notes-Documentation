@@ -1,0 +1,105 @@
+
+Employee Details table Created:
+
+-->Exception Handling
+
+-->Junit Testing
+
+-->JPA Operation and all the cases 
+
+--->Json Object mapping for request and response.
+
+-->Association Mapping between two or more tables
+
+-->Pagenation
+
+-->Header parameter set
+
+-->Actauator
+
+-->swagger api testing
+
+{
+    "empName": "Bhumi",
+    "dob": "1990-02-01",
+    "skills": ["java","springboot"],
+    "joiningDate": "2024-09-08",
+    "qualification": "BTech",
+    "role": "Software Engineer"
+}
+
+JPA Validation:
+
+Notes:
+
+Declaring of single unique contrains means
+
+@Table(name="employee_details",uniqueConstraints = @UniqueConstraint(columnNames = "pan"))
+
+if multiple unique contrains then  use the columnNames
+@Column(name = "pan", unique = true, nullable = false)
+
+@Table(name = "employee",
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = "email"),
+           @UniqueConstraint(columnNames = "phone_number"),
+           @UniqueConstraint(columnNames = {"email", "phone_number"})
+       })
+	   
+	   
+Date shape entity level using Jackson API
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	
+	
+Association mapping:
+==============================================================
+One to one: One employee having personal details
+
+EmployeeDetails:
+
+
+@OneToOne(mappedBy = "employeeDetails")
+	private PersonalDetails persionalDetails;
+
+PersonalDetails:
+
+@OneToOne
+    @JoinColumn(name = "employee_details_id")
+	private EmployeeDetails employeeDetails;
+
+Commit and rollback:
+
+@Transactional
+
+One To Many:
+PersonalDetails:
+
+@OneToMany(mappedBy="personalDetails",cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AddressDetails> addressDetails;
+		
+AddressDetails:
+	@ManyToOne
+	 @JoinColumn(name = "personal_details_id", nullable = false)
+	private PersonalDetails personalDetails;
+	   
+	   
+ManyToMany:
+
+EmployeeDetails:
+
+ @ManyToMany
+    @JoinTable(
+        name = "employee_address",  // Join table name
+        joinColumns = @JoinColumn(name = "employee_id"),  // Column for Employee's id
+        inverseJoinColumns = @JoinColumn(name = "address_id")  // Column for Address's id
+    )
+    private Set<AddressDetails> addressDetails;
+	
+	
+	Addess Details:
+	
+	@ManyToMany(mappedBy = "addressDetails")
+    private Set<Employee> employees;
+	   
+	   

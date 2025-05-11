@@ -1,0 +1,106 @@
+Pass by Value and Pass by Reference:
+======================================
+package com.app.core;
+
+public class PassByReferencePassByValue {
+
+
+	public static void main(String[] args) {
+		//pass by value for primitives
+		int a=25;
+		passByValue(a);
+		System.out.println("after method called"+a);
+		//pass by reference for non primitives
+		int[] arr= {123,134};
+		passByReference(arr);
+		System.out.println("after method reference called"+arr[0]);
+	}
+	public static void passByValue(int num) {
+		System.out.println("befor"+num);
+		num=35;
+		System.out.println("befor"+num);	  
+	}
+	public static void passByReference(int[] num) {
+		System.out.println("befor"+num);
+		num[0]=35;
+		System.out.println("befor"+num);	  
+	}
+}
+
+
+Immutability class:
+//if the class is final optional in this case
+//inside all the data member should be private
+//only using get method ,should not use the set methods
+
+
+package com.app.core;
+
+public final class immutabilityclass {
+
+	 private String data;
+	 public immutabilityclass(String data) {
+		   this.data=data;
+		}
+	
+	public String getData() {
+	   return data;
+	}
+	
+	public static void main(String[] args) {
+	   
+		immutabilityclass im=new immutabilityclass("Ankaiah");
+         System.out.println(im.getData()); 
+          
+	}
+
+}
+
+Sigleton Class:
+============
+Private constructor to restrict instantiation of the class from other classes.
+Private static variable of the same class that is the only instance of the class.
+Public static method that returns the instance of the class, this is the global access point for the outer world to get the instance of the singleton class.
+
+package com.app.core;
+
+public class SigletonClass {
+
+	private static final SigletonClass instance = new SigletonClass();
+
+    // private constructor to avoid client applications using the constructor
+    private SigletonClass(){}
+
+    public static SigletonClass getInstance() {
+        return instance;
+    }
+
+}
+
+Sorting Using List:
+
+naturalOrder:
+
+  List < String > sortedList=list.stream().sorted(Comparator.naturalOrder()).coolect(Collectors.toList());
+List < String > sortedList=list.stream().sorted((e1,e2)->e1.compareTo(e2)).collect(Collectors.toList());
+List < String > sortedList=list.stream().sorted().collect(Collectors.toList());
+
+Disending order:
+List < String > sortedList=list.stream().sorted((e1,e2)->e2.compareTo(e1)).collect(Collectors.toList());
+List < String > sortedList=list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+Custom Object Sorting:
+
+List < Employee  > sortedList=list.stream().sorted(Comparator.comparingInt(Employee::getSalary).collect(Collectors.toList());
+
+reversed:
+
+ List < Employee > employeesSortedList2 = employees.stream()
+            .sorted(Comparator.comparingLong(Employee::getSalary).reversed()).collect(Collectors.toList()); 
+
+
+
+
+
+
+

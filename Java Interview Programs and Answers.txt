@@ -1,0 +1,226 @@
+Java Stream API Interview Programs and Answers:
+
+I.Count of Occurrence happens in the list
+
+Ex: [Anki=2,shivani=1]
+
+	ArrayList<String> list=new ArrayList<String>();
+		
+		list.add("Anki");
+		list.add("Ramu");
+		list.add("Test");
+		list.add("test");
+		list.add("Anki");
+	Map<String, Long> map=list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+
+2.Find the second largest element in the String
+
+Optional<String> name=	list.stream().sorted(Comparator.reverseOrder()).skip(1).findFirst();
+
+3.Find the duplicates in list?
+
+List<String> dup=list.stream().distinct().collect(Collectors.toList());
+
+4. Find the duplicated elements counts?
+
+long map2=list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting())).entrySet().stream().filter(e->e.getValue()>1).count();
+
+5.  How to add all String Concat using Strem api and String Joiner concept?
+
+String join=list.stream().collect(Collectors.joining("-"));
+StringJoiner l2=new StringJoiner("-");
+
+list.forEach(l2::add);
+
+String resultWithJoiner = l2.toString();
+
+6.To sort the list of employee salary 
+
+  List<Employee> emp= employees.stream().sorted(Comparator.comparingDouble(Employee::getSalary)).collect(Collectors.toList());
+  System.out.println("Sorted by Name (Ascending):");
+  emp.forEach(System.out::println);
+7.Find the average of employee salary
+Custome Object:
+
+  double averageSalary = employees.stream()
+          .mapToDouble(Employee::getSalary) // Convert to a DoubleStream
+          .average() // Calculate the average
+          .orElse(0.0); // Default value if no employees
+  System.out.println("Average Salary: " + averageSalary);
+Normal order:
+
+  Integer var = list.stream().max(Integer::compare).get(); 
+ int max = list.stream().max(Comparator.naturalOrder()).get();
+
+
+8.Find the employee salaray comparing then age;
+
+  List<Employee> emp= employees.stream().filter(e->e.getAge()>30).sorted(Comparator.comparingDouble(Employee::getSalary).thenComparing(Employee::getAge)).collect(Collectors.toList());
+
+9.Find the list of employee salary find the max salarya and second highest salary?
+
+double max = employees.stream()
+          .mapToDouble(Employee::getSalary) // Convert to a DoubleStream
+          .max() // Calculate the average
+          .orElse(0.0);
+10.Reverse Order by Employee Salary
+
+  List<Employee> sortedByNameDesc = employees.stream()
+                .sorted(Comparator.comparing(Employee::getName).reversed())
+                .collect(Collectors.toList());
+
+11.Sort the Hash Value by using HashMap assending and descending order?
+
+ Map<String, Integer> budget = new HashMap<>();
+	    budget.put("clothes", 120);
+	    budget.put("grocery", 150);
+	    budget.put("transportation", 100);
+	    budget.put("utility", 130);
+	    budget.put("rent", 1150);
+	    budget.put("miscellneous", 90);
+	    Map<String, Integer> sorted = budget .entrySet() .stream() .sorted(comparingByValue()) .collect( toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
+	    System.out.println("map after sorting by values: " + sorted);
+
+	 // above code can be cleaned a bit by using method reference
+	    sorted = budget
+	        .entrySet()
+	        .stream()
+	        .sorted(comparingByValue())
+	        .collect(
+	            toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+	                LinkedHashMap::new));
+
+	    // now let's sort the map in decreasing order of value
+	    sorted = budget
+	        .entrySet()
+	        .stream()
+	        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+	        .collect(
+	            toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+	                LinkedHashMap::new));
+
+	    System.out.println("map after sorting by values in descending order: "
+	        + sorted);
+	  
+	
+12. Java 8 Stream Api filter and Map different scenario?
+
+   List<String> G7 = Arrays.asList("USA", "Japan", "France", "Germany", "Italy", "U.K.","Canada"); 
+	    String G7Countries = G7.stream() .map(x -> x.toUpperCase()) .collect(Collectors.joining(", "));
+System.out.println(G7Countries);
+
+//Create List of square of all distinct numbers 
+List<Integer> numbers = Arrays.asList(9, 10, 3, 4, 7, 3, 4); 
+List<Integer> distinct = numbers.stream() .map( i -> i*i).distinct() .collect(Collectors.toList()); 
+System.out.printf("Original List : %s, Square Without duplicates : %s %n", numbers, distinct);
+
+//Get count, min, max, sum, and average for numbers
+ List<Integer> primes = Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29);
+ IntSummaryStatistics stats = primes.stream() .mapToInt((x) -> x) .summaryStatistics();
+ System.out.println("Highest prime number in List : " + stats.getMax());
+ System.out.println("Lowest prime number in List : " + stats.getMin());
+ System.out.println("Sum of all prime numbers : " + stats.getSum());
+ System.out.println("Average of all prime numbers : " + stats.getAverage());
+
+13.How do you merge two unsorted arrays into single sorted array using Java 8 streams?
+ int[] a = new int[] {4, 2, 7, 1};
+         
+        int[] b = new int[] {8, 3, 9, 5};
+         
+        int[] c = IntStream.concat(Arrays.stream(a), Arrays.stream(b)).sorted().toArray();
+         
+        System.out.println(Arrays.toString(c));
+
+remove duplicates:
+ int[] c = IntStream.concat(Arrays.stream(a), Arrays.stream(b)).sorted().distinct().toArray();
+System.out.println(Arrays.toString(c));
+
+14.How do you get three maximum numbers and three minimum numbers from the given list of integers?
+
+List<Integer> listOfIntegers = Arrays.asList(45, 12, 56, 15, 24, 75, 31, 89);
+listOfIntegers.stream().sorted().limit(3).forEach(System.out::println);
+listOfIntegers.stream().sorted(Comparator.reverseOrder()).limit(3).forEach(System.out::println);
+
+14.Find sum of all digits of a number in Java 8?
+
+        Integer sumOfDigits = Stream.of(String.valueOf(i).split("")).collect(Collectors.summingInt(Integer::parseInt));
+         
+        System.out.println(sumOfDigits);
+15.Given a list of strings, sort them according to increasing order of their length?
+
+        List<String> listOfStrings = Arrays.asList("Java", "Python", "C#", "HTML", "Kotlin", "C++", "COBOL", "C");
+         
+        listOfStrings.stream().sorted(Comparator.comparing(String::length)).forEach(System.out::println);
+16.Given an integer array, find sum and average of all elements?
+
+ int[] a = new int[] {45, 12, 56, 15, 24, 75, 31, 89};
+         
+        int sum = Arrays.stream(a).sum();
+         
+        System.out.println("Sum = "+sum);
+         
+        double average = Arrays.stream(a).average().getAsDouble();
+         
+        System.out.println("Average = "+average);
+
+17.How do you find common elements between two arrays?
+
+List<Integer> list1 = Arrays.asList(71, 21, 34, 89, 56, 28);
+         
+        List<Integer> list2 = Arrays.asList(12, 56, 17, 21, 94, 34);
+         
+        list1.stream().filter(list2::contains).forEach(System.out::println);
+
+18.Reverse each word of a string using Java 8 streams?
+String str = "Java Concept Of The Day";
+         
+        String reversedStr = Arrays.stream(str.split(" "))
+                                    .map(word -> new StringBuffer(word).reverse())
+                                    .collect(Collectors.joining(" "));
+         
+        System.out.println(reversedStr);
+
+19.How do you find sum of first 10 natural numbers?
+int sum = IntStream.range(1, 11).sum();
+         
+        System.out.println(sum);---->55
+
+20.Print duplicate characters in a string?
+
+String inputString = "Java Concept Of The Day".replaceAll("\\s+", "").toLowerCase();
+         
+        Set<String> uniqueChars = new HashSet<>();
+         
+        Set<String> duplicateChars = 
+                Arrays.stream(inputString.split(""))
+                        .filter(ch -> ! uniqueChars.add(ch))
+                        .collect(Collectors.toSet());
+         
+        System.out.println(duplicateChars);----[a, c, t, e, o]
+21.Find first repeated character in a string?
+charCountMap.entrySet()
+                                                .stream()
+                                                .filter(entry -> entry.getValue() > 1)
+                                                .map(entry -> entry.getKey())
+                                                .findFirst()
+                                                .get();
+22.Find first non-repeated character in a string?
+ String inputString = "Java Concept Of The Day".replaceAll("\\s+", "").toLowerCase();
+         
+        Map<String, Long> charCountMap = 
+                            Arrays.stream(inputString.split(""))
+                                    .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+         
+        String firstNonRepeatedChar = charCountMap.entrySet()
+                                                .stream()
+                                                .filter(entry -> entry.getValue() == 1)
+                                                .map(entry -> entry.getKey())
+                                                .findFirst()
+                                                .get();
+         
+
+23.Find the age of a person in years if the birthday has given?
+  LocalDate birthDay = LocalDate.of(1985, 01, 23);
+        LocalDate today = LocalDate.now();
+         
+        System.out.println(ChronoUnit.YEARS.between(birthDay, today));

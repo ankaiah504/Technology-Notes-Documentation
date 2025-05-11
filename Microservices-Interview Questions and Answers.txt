@@ -149,3 +149,4 @@ Note: We will register every service with Service Registry
 -> API Gateway also will be registered with Service Registry
 
 
+====================================================================

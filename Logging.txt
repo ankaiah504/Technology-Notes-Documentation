@@ -197,13 +197,13 @@ Log Monitoring Tools
 1) ELK / EFK  - Open source s/w
 
 2) Splunk - Commercial s/w
-
+ 
 
 Splunk : https://youtu.be/BUfOuWLgnMU?si=i9K_iS7FJ9pISIok
 
 EFK : https://youtu.be/8MLcbbfEL1U?si=OpRu00vghWF5lMNO
 
-
++
 
 
 

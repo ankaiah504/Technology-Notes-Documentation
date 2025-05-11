@@ -1,0 +1,72 @@
+   Map<String, Long> duplicates = list.stream()
+            .collect(Collectors.groupingBy(
+                item -> item, 
+                Collectors.counting()
+            ))
+            .entrySet()
+            .stream()
+            .filter(entry -> entry.getValue() > 1)
+            .collect(Collectors.toMap(
+                Map.Entry::getKey, 
+                Map.Entry::getValue
+            ));
+
+
+        // Find duplicates and their counts
+
+
+  // Count occurrences of each integer
+        Map<Integer, Long> occurrenceCount = list.stream()
+            .collect(Collectors.groupingBy(
+                Integer::intValue, 
+                Collectors.counting()
+            ));
+			
+			
+	// If you want to filter and show only duplicates (occurrences > 1)
+        Map<Integer, Long> duplicates = occurrenceCount.entrySet()
+            .stream()
+            .filter(entry -> entry.getValue() > 1)
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+            ));
+Occurrence count of each integer: {1=1, 2=2, 3=1, 4=3, 5=1}
+Duplicates and their counts: {2=2, 4=3}
+
+
+ List<Integer> uniqueList = myList.stream()
+                                         .distinct()        // Remove duplicates
+                                         .collect(Collectors.toList()); // Collect back to a list
+        3. Convert a List of Strings to Uppercase
+		 List<String> uppercasedWords = words.stream()
+                                            .map(String::toUpperCase)
+                                            .collect(Collectors.toList());
+											
+											
+											        long count = numbers.stream().count();
+
+
+4. Count the Number of Elements in a List
+
+5. Sum of All Elements in a List
+
+int sum = numbers.stream()
+                         .mapToInt(Integer::intValue)
+                         .sum();
+						 
+			6. Flatten a List of Lists			 
+						 
+						 List<Integer> flatList = listOfLists.stream()
+                                             .flatMap(List::stream)
+                                             .collect(Collectors.toList());
+											 
+											 
+											 7. Group By Even and Odd Numbers
+											 
+											 
+											 Map<String, List<Integer>> grouped = numbers.stream()
+                                                    .collect(Collectors.groupingBy(
+                                                        n -> n % 2 == 0 ? "Even" : "Odd"
+                                                    ));
+

@@ -1,0 +1,478 @@
+Difference Between Spring @Qualifier and @Primary Annotations
+===============================================================
+@Qualifier Annotation:
+@Qualifier annotation is used to resolve ambiguity when multiple beans of the same type are present in a Spring application context.
+Ex:
+
+public interface MessageService {
+    public void sendMsg(String message);
+}
+
+public class EmailService implements MessageService{
+
+    public void sendMsg(String message) {
+         System.out.println(message);
+    }
+}
+
+public class TwitterService implements MessageService{
+
+    public void sendMsg(String message) {
+        System.out.println(message);
+    }
+}
+
+public class SMSService implements MessageService{
+
+    public void sendMsg(String message) {
+         System.out.println(message);
+    }
+}
+
+public interface MessageProcessor {
+    public void processMsg(String message);
+}
+
+public class MessageProcessorImpl implements MessageProcessor {
+
+    private MessageService messageService;
+
+    // setter based DI
+    @Autowired
+    @Qualifier("twitterService")
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+ 
+    // constructor based DI
+    @Autowired
+    public MessageProcessorImpl(@Qualifier("twitterService") MessageService messageService) {
+        this.messageService = messageService;
+    }
+ 
+    public void processMsg(String message) {
+        messageService.sendMsg(message);
+    }
+}
+
+
+@Primary Annotation: which should be injucted no qualifier required for defult bean
+The @Primary annotation is used to indicate a default bean when multiple beans of the same type are present. If multiple beans are eligible for autowiring and none of 
+them are explicitly specified using @Qualifier, the bean marked with @Primary will be selected by default.
+
+@Component
+@Primary
+public class EmailSender implements MailSender {
+    // ...
+}
+
+@Component
+public class SmsSender implements MailSender {
+    // ...
+}
+
+@Service
+public class NotificationService {
+    @Autowired
+    private MailSender mailSender;
+    // ...
+}
+
+the @Qualifier annotation is used to resolve ambiguity when multiple beans of the same type exist, 
+whereas the @Primary annotation designates a default bean to be injected when no qualifier is specified
+
+
+what are http statuscodes in spring boot:
+==============================================================================================
+200	OK	The request was successfully completed
+
+201	Created	A new resource was successfully created.
+400	Bad Request	The request was invalid.
+401	Unauthorized	The request did not include an authentication token or the authentication token was expired.
+403	Forbidden	The client did not have permission to access the requested resource.
+404	Not Found	The requested resource was not found.
+405	Method Not Allowed
+500	Internal Server Error
+503	Service Unavailable
+
+How to handle exception in java and spring boot?
+===============================================================================================
+Java:
+
+public class CustomerAlreadyExistsException extends RuntimeException {
+    private String message;
+
+    public CustomerAlreadyExistsException() {}
+
+    public CustomerAlreadyExistsException(String msg) {
+        super(msg);
+        this.message = msg;
+    }
+}
+
+ public String addCustomer(Customer customer)
+    {
+        Customer existingCustomer
+            = customerRespository.findById(customer.getId())
+                  .orElse(null);
+        if (existingCustomer == null) {
+            customerRespository.save(customer);
+            return "Customer added successfully";
+        }
+        else
+            throw new CustomerAlreadyExistsException(
+                "Customer already exists!!");
+    }
+
+Spring:
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ErrorResponse {
+
+    private int statusCode;
+    private String message;
+
+    public ErrorResponse(String message)
+    {
+        super();
+        this.message = message;
+    }
+}
+
+@ExceptionHandler: method level
+
+
+@ExceptionHandler(value = CustomerAlreadyExistsException.class)
+@ResponseStatus(HttpStatus.CONFLICT)
+public ErrorResponse handleCustomerAlreadyExistsException(CustomerAlreadyExistsException ex) {
+    return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+}
+
+@ControllerAdvice:  Class level Globalli
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = NoSuchCustomerExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody ErrorResponse handleException(NoSuchCustomerExistsException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+}
+
+
+What is Loosely Coupling and Tighly Coupling :
+==============================================================
+
+public class Engine {
+	
+	public int start ( ) {
+		// logic
+		return 1;
+	}
+}
+
+public class Car {
+
+	public void drive() {
+
+		Engine eng = new Engine ( );
+		int start = eng.start();
+
+		if (start >= 1) {
+			System.out.println("Journey Started");
+		}
+
+		// start the journey
+	}
+}
+
+
+if Engine class constructor modified then our Car class will be effected
+
+If we use any approach from above then Car class will become tightley coupled with Engine class. That is not recommended.
+
+Loosely Coupling:
+
+=> Loosely coupling means without creating Object and without Inheriting properties we should be able to access one class method in  another class.
+
+=> If we make any changes in Engine class then Car class shouldn't be effected then we can say our classes are loosely coupled.
+
+
+what is IOC Container:
+===============================================================
+
+-> IoC stands for Inversion Of Control.
+
+-> IoC is responsible for Dependency Injection in Spring Applications.
+
+-> Dependency Injection means creating and injecting dependent bean objects into target bean classes.
+
+Note: IoC container will manage life cycle of Spring Beans.
+
+Note  : We need to provide " Java classes + Bean Configuration " as input for IOC then IOC will perform DI and provides Spring Beans which are ready to use.
+
+
+what are the scopes in spring ?
+==========================================================================
+
+=> Scope represents how many objects should be created for a Spring Bean
+=> To represent bean scope we will use    "scope" attribute
+
+		<bean id="id"  class="pkg.classname"  scope = "singleton | prototye | request | session " />
+
+-> Singleton scope means only one object will be created for the class in IOC Container. This is default scope of spring bean.
+
+-> Prototype scope means every time new object will be created.
+
+Note: request & session scopes are related to Spring Web MVC Module.
+
+Why Spring Bean is by default Singleton ?
+=============================================================================
+
+=> To save memory of JVM spring team made singleton as default scope for the spring beans.
+
+what is difference between byName and byType and Contructor?
+==============================================================================
+Autowiring will not work bydefault, We have to enable autowiring on target bean like below.
+
+		<bean id="id" class="pkg.Classname"   auto-wire="byName | byType | constructor | no " />
+		
+byName: IoC will identify dependent bean object based on bean id or bean name.
+========
+Ex:
+
+public class Car {
+
+	private IEngine eng;
+
+	public void setEng(IEngine eng) {
+		System.out.println("setEng ( ) method called....");
+		this.eng = eng;
+	}
+
+	public void drive() {
+		int status = eng.start();
+
+		if (status >= 1) {
+			System.out.println("Journey Started..");
+		} else {
+			System.out.println("Engine Trouble");
+		}
+	}
+}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="eng1" class="in.ashokit.beans.PetrolEngine" />
+
+	<bean id="eng" class="in.ashokit.beans.DieselEngine" />
+
+	<bean id="car" class="in.ashokit.beans.Car" autowire="byName"/>
+
+</beans>
+
+Note: In the above example Car class variable name is matched with 'DieselENgine' bean id hence DieselEngine obj will be injected into Car.
+
+byType: IoC will identity dependent  bean object based on data type of the variable in Target class.
+private IEngine eng;    ====> data type of eng is IEngine which is an interface
+
+=> If one interface having 2 implementations then there is a chance of getting Ambiguity problem. To overcome that we need to use 'autowire-candiate' attribute.
+
+			autowire-candidate="false"     ====> Not Eligible for Autowiring
+
+			autowire-candidate="true"        ===> Eligible for Autowiring
+
+Note: As an alternate for "autowire-candidate=true"  we can use "primary=true" to consider bean for Autowiring.
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="eng2" class="in.ashokit.beans.PetrolEngine" autowire-candidate="false"/>
+
+	<bean id="eng1" class="in.ashokit.beans.DieselEngine" autowire-candidate="true"/>
+
+	<bean id="car" class="in.ashokit.beans.Car" autowire="byType" />
+
+</beans>
+
+(or)
+constructor: => It is used to perform Autowiring by calling target class constructor
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="eng2" class="in.ashokit.beans.PetrolEngine" primary="true" />
+
+	<bean id="eng1" class="in.ashokit.beans.DieselEngine"  />
+
+	<bean id="car" class="in.ashokit.beans.Car" autowire="constructor" />
+
+</beans>
+
+Note: Autowiring is applicable for Reference Type variable (not applicable for primitive types)
+
+what is spring bean life cycle?
+==================================================================================================
+=> Life cycle means starting to ending  or birth to death
+=> Spring Bean object creation and object destruction will be taken care by IOC container.
+=> Spring Bean Life Cycle will be managed by Ioc Container.
+
+=> We can perform some operations using Bean Life Cycle Methods
+
+				init ( )    --------> initialization logic
+
+				destroy ( )  -----> destruction logic
+				
+=> Spring Bean Life Cycle methods we can execute in 3 ways
+
+			1) XML Approach (Declarative)
+			2) Progrmmatic approach
+			3) Annotations			
+<bean id="motor" class="in.ashokit.beans.Motor" 
+					 init-method="start" 
+					 destroy-method="stop"/>
+
+init-method   ==> It represents the method which should be called after bean obj created
+
+destroy-method ==> It represents the method which should be called when bean obj removing from IoC
+
+Programmatic:
+
+=> We need to implement predefined interfaces provided by Spring Framework
+			
+		1) InitializingBean ---> afterPropertiesSet ( ) 
+
+		2) DisposableBean ---> destroy ( ) 
+
+public class Motor implements InitializingBean, DisposableBean {
+}
+
+Annotation:
+@PostConstruct -----> It represents init method
+
+@PreDestroy ----> It represents destroy method
+
+
+what are the spring boot annotations
+=============================================================================================================
+
+@SpringBootApplication: @Configuration+@EnableAutoConfiguration+@ComponentScan
+
+@Component:
+@Service
+@Repository
+@Controller:a controller in a Spring MVC application.
+@RestController:  combines @Controller and @ResponseBody  It is used to create RESTful web services.
+@RequestMapping: Used to map web requests to specific handler methods or classes.
+  Ex:@RequestMapping("/api")
+  @Autowired
+  
+  @Value:  Used to inject property values into Spring beans.
+  @Value("${my.property}")
+private String myProperty;
+
+@RequstParam and @PathParam difference between:
+=====================================================================================================
+@RequestParam:  query parameter or form parameter
+
+Purpose: Used to extract query parameters from the URL.
+Location in URL: Parameters are part of the query string in the URL, following a ? and separated by &.
+Usage: Typically used with HTTP GET requests to retrieve parameters.
+
+@GetMapping("/greet")
+public String greet(@RequestParam String name) {
+    return "Hello, " + name;
+}
+
+@PathVariable
+Purpose: Used to extract values from the URI path itself.
+Location in URL: Parameters are part of the URL path, defined by curly braces {} in the path pattern.
+Usage: Typically used with HTTP GET requests to extract variables embedded directly in the URL path.
+
+@GetMapping("/greet/{name}")
+public String greet(@PathVariable String name) {
+    return "Hello, " + name;
+}
+
+@RequestParam: Extracts parameters from the query string (e.g., ?key=value).
+@PathVariable: Extracts parameters directly from the URL path (e.g., /path/{value}).
+
+
+what is difference between monolithik and microservice?
+===========================================================
+
+========================
+Monolith Architecture
+========================
+
+=> Develop all functionalities in single app
+
+=> Application will be packaged as one fat jar / fat war 
+
+=> App will be deployed in single server
+
+==========
+Drawbacks
+==========
+
+1) Single Point of failure
+2) Re-Deploy entire app
+3) Maintenence of the app
+4) Burden on server
+
+===============
+Microservices
+===============
+
+=> Microservices is a not a technology
+
+=> Microservices is not a framework
+
+=> Microservices is not an API
+
+=> Microservices is an architectural design pattern
+
+=> Microservices design pattern is universal
+
+=> The main aim of microservices is to develop app with loosely coupling
+
+=> Microservices based application means collection of rest apis.
+
+=> Microservices means independetly deployable and executable services.
+
+
+=========
+Benefits
+=========
+
+1) Loosely Coupled
+2) Easy Maintenence`
+3) Load will be distributed
+4) Technology Independency
+5) High Availability
+
+===========
+Challenges
+===========
+
+1) Bounded Context (deciding no.of rest apis to develop)
+2) Duplicate Configuration
+3) Visibility
+
+
+
+
+
+
